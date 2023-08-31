@@ -65,7 +65,11 @@ const HomeScreen = ({navigation}: any) => {
   React.useEffect(() => {
     (async () => {
       let temNowPlaying = await getNowPlayingMoviesList();
-      setNowPlayingMoviesList(temNowPlaying.results);
+      setNowPlayingMoviesList([
+        {id: 'dummy1'},
+        ...temNowPlaying.results,
+        {id: 'dummy2'}
+      ]);
 
       let temPopular = await getPopularMoviesList();
       setPopularMoviesList(temPopular.results);
@@ -115,25 +119,34 @@ const HomeScreen = ({navigation}: any) => {
         data={nowPlayingMoviesList}
         keyExtractor={(item:any) => item.id}
         horizontal
+        bounces={false}
+        snapToInterval={width * 0.7 + SPACING.space_36}
         contentContainerStyle={styles.containerGap36}
-        renderItem={({item, index}) => (
-          <MovieCard
-            title={item.original_title} 
-            imagePath={baseImagePath('w780', item.poster_path)}
-            shouldMarginatedAtEnd={true}
-            cardFunction={() => {
-              navigation.push('MovieDetails', {
-                movieId: item.id
-              })
-            }}
-            cardWidth={width * 0.7}
-            isFirst={index === 0 ? true : false}
-            isLast={index === upcomingMoviesList?.length - 1 ? true : false}
-            genre={item.genre_ids.slice(1,4)}
-            vote_average={item.vote_average}
-            vote_count={item.vote_count}
-          /> 
-        )}
+        renderItem={({item, index}) => {
+          if(!item.original_title) {
+            return (
+              <View style={{width: (width - (width * 0.7 + SPACING.space_36 * 2)) / 2}}></View>
+            )
+          }
+          return (
+            <MovieCard
+              title={item.original_title} 
+              imagePath={baseImagePath('w780', item.poster_path)}
+              shouldMarginatedAtEnd={true}
+              cardFunction={() => {
+                navigation.push('MovieDetails', {
+                  movieId: item.id
+                })
+              }}
+              cardWidth={width * 0.7}
+              isFirst={index === 0 ? true : false}
+              isLast={index === upcomingMoviesList?.length - 1 ? true : false}
+              genre={item.genre_ids.slice(1,4)}
+              vote_average={item.vote_average}
+              vote_count={item.vote_count}
+            /> 
+          )
+        }}
       />
 
       {/* Render the Popular movies component */}
@@ -142,6 +155,7 @@ const HomeScreen = ({navigation}: any) => {
         data={popularMoviesList}
         keyExtractor={(item:any) => item.id}
         horizontal
+        bounces={false}
         contentContainerStyle={styles.containerGap36}
         renderItem={({item, index}) => (
           <SubMovieCard
@@ -166,6 +180,7 @@ const HomeScreen = ({navigation}: any) => {
         data={upcomingMoviesList}
         keyExtractor={(item:any) => item.id}
         horizontal
+        bounces={false}
         contentContainerStyle={styles.containerGap36}
         renderItem={({item, index}) => (
           <SubMovieCard
