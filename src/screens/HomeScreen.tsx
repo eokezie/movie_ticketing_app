@@ -21,6 +21,7 @@ import {
 import InputHeader from '../components/InputHeader';
 import CategoryHeader from '../components/CategoryHeader';
 import SubMovieCard from '../components/SubMovieCard';
+import MovieCard from '../components/MovieCard';
 
 const { width, height } = Dimensions.get('window');
 
@@ -86,7 +87,6 @@ const HomeScreen = ({navigation}: any) => {
       <ScrollView 
         style={styles.container}
         bounces={false}
-        contentContainerStyle={styles.scrollViewContainer}
       >
         <StatusBar hidden />
         <View style={styles.inputHeaderContainer}>
@@ -102,7 +102,6 @@ const HomeScreen = ({navigation}: any) => {
     <ScrollView 
       style={styles.container}
       bounces={false}
-      contentContainerStyle={styles.scrollViewContainer}
     >
       <StatusBar hidden />
 
@@ -112,27 +111,30 @@ const HomeScreen = ({navigation}: any) => {
 
       {/* Render The npw playing movies component */}
       <CategoryHeader title={'Now Playing'} />
-      {/* <FlatList 
+      <FlatList 
         data={nowPlayingMoviesList}
         keyExtractor={(item:any) => item.id}
         horizontal
         contentContainerStyle={styles.containerGap36}
         renderItem={({item, index}) => (
-          <SubMovieCard
+          <MovieCard
             title={item.original_title} 
-            imagePath={baseImagePath('w342', item.poster_path)}
+            imagePath={baseImagePath('w780', item.poster_path)}
             shouldMarginatedAtEnd={true}
             cardFunction={() => {
               navigation.push('MovieDetails', {
                 movieId: item.id
               })
             }}
-            cardWidth={width / 3}
+            cardWidth={width * 0.7}
             isFirst={index === 0 ? true : false}
             isLast={index === upcomingMoviesList?.length - 1 ? true : false}
+            genre={item.genre_ids.slice(1,4)}
+            vote_average={item.vote_average}
+            vote_count={item.vote_count}
           /> 
         )}
-      /> */}
+      />
 
       {/* Render the Popular movies component */}
       <CategoryHeader title={'Popular '} />
@@ -160,7 +162,7 @@ const HomeScreen = ({navigation}: any) => {
 
       {/* Render the upcoming movies component */}
       <CategoryHeader title={'Upcoming'} />
-      {/* <FlatList 
+      <FlatList 
         data={upcomingMoviesList}
         keyExtractor={(item:any) => item.id}
         horizontal
@@ -180,7 +182,7 @@ const HomeScreen = ({navigation}: any) => {
             isLast={index === upcomingMoviesList?.length - 1 ? true : false}
           /> 
         )}
-      /> */}
+      />
     </ScrollView>
   );
 };
@@ -189,9 +191,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     backgroundColor: COLORS.Black
-  },
-  scrollViewContainer: {
-    flex: 1
   },
   loadingContainer: {
     flex: 1,
