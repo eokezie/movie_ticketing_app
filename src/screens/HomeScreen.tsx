@@ -1,19 +1,25 @@
 import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { COLORS } from '../theme/theme';
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: any) => {
   return (
     <View style={styles.container}>
-      <Text>HomeScreen</Text>
+      <TouchableOpacity onPress={() => {navigation.push('MovieDetails')}}>
+        <Text style={styles.header}>HomeScreen</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: COLORS.Black
+  },
+  header: {
+    color: COLORS.White
   }
 });
 
